@@ -6,9 +6,10 @@ authors = [
     {name = "Temo4ka",email = "artemy.bukin@yandex.ru"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<3.15"
 dependencies = [
-    "pandas (>=2.3.3,<3.0.0)"
+    "pandas (>=2.3.3,<3.0.0)",
+    "torchvision (>=0.24.1,<0.25.0)"
 ]
 
 [tool.poetry]
