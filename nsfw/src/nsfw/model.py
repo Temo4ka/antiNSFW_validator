@@ -5,9 +5,10 @@ import torch.nn.functional as F
 from torchmetrics import AUROC, Accuracy, Precision, Recall, F1Score
 import timm
 
-class ConvNextModel(pl.TorchLightningModule):
+class ConvNextModel(pl.LightningModule):
     def __init__(self, config):
         super().__init__()
+        self.config = config
 
         self.backbone = timm.create_model(
             config['model']['model_name'], 
@@ -23,11 +24,11 @@ class ConvNextModel(pl.TorchLightningModule):
         self.classifier = nn.Sequential(
             nn.LayerNorm(self.features_dim, eps=1e-6),
             nn.Dropout(0.4),
-            nn.Linear(self.features_dim, num_classes)
+            nn.Linear(self.features_dim, config['model']['num_classes'])
         )
 
         self.optimizer = torch.optim.AdamW(
-            self.backbone.params(),
+            self.backbone.parameters(),
             lr = self.config['optimizer']['learning_rate'],
             weight_decay = self.config['training']['weight_decay']
         )
@@ -36,6 +37,8 @@ class ConvNextModel(pl.TorchLightningModule):
         self.val_acc = AUROC(task='binary')
         self.test_acc = AUROC(task='binary')
 
+    def configure_optimizers(self):
+        return self.optimizer
 
     def forward(self, x):
         return self.classifier(self.backbone(x))
@@ -56,8 +59,8 @@ class ConvNextModel(pl.TorchLightningModule):
 
         return loss
     
-    def on_train_epoch_end(self, batch, batch_index):
-        self.train_acc.compute()
+    def on_train_epoch_end(self):
+        self.log('train_auroc', self.train_acc.compute())
         self.train_acc.reset()
 
     def validation_step(self, batch, batch_index):
@@ -75,7 +78,7 @@ class ConvNextModel(pl.TorchLightningModule):
 
         return loss
     
-    def on_validation_epoch_end(self, batch, batch_index):
+    def on_validation_epoch_end(self):
         self.val_acc.compute()
         self.val_acc.reset()
 
@@ -84,8 +87,10 @@ class ConvNextModel(pl.TorchLightningModule):
 
         probs = torch.sigmoid(self(images))
 
-        self.test_acc.update(probs)
+        self.test_acc.update(probs, labels.long())
 
+        self.log('test_auroc', self.test_acc.compute())
+        self.test_acc.reset()
         return {'probs' : probs, 'labels' : labels}
     
     def predict_step(self, batch, batch_index):
