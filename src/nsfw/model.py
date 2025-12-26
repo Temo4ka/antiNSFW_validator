@@ -1,9 +1,10 @@
 import pytorch_lightning as pl
+import timm
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchmetrics import AUROC, Accuracy, Precision, Recall, F1Score
-import timm
+from torchmetrics import AUROC, Accuracy, F1Score, Precision, Recall
+
 
 class ConvNextModel(pl.LightningModule):
     def __init__(self, config):
@@ -11,8 +12,8 @@ class ConvNextModel(pl.LightningModule):
         self.config = config
 
         self.backbone = timm.create_model(
-            config['model']['model_name'], 
-            pretrained = config['model']['pretrained'], 
+            config['model']['model_name'],
+            pretrained = config['model']['pretrained'],
             num_classes = 0
         )
 
@@ -39,12 +40,12 @@ class ConvNextModel(pl.LightningModule):
             lr=self.config['optimizer']['learning_rate'],
             weight_decay=self.config['training']['weight_decay']
         )
-        return optimizer  
+        return optimizer
 
     def forward(self, x):
         return self.classifier(self.backbone(x))
-    
-    def training_step(self, batch, batch_index):
+
+    def training_step(self, batch, batch_idx):
         images, labels = batch
 
         logits = self(images)
@@ -52,7 +53,7 @@ class ConvNextModel(pl.LightningModule):
         loss = F.binary_cross_entropy_with_logits(
             logits,
             labels,
-            pos_weight=self.pos_weight 
+            pos_weight=self.pos_weight
         )
 
         self.log('train_loss', loss)
@@ -61,12 +62,12 @@ class ConvNextModel(pl.LightningModule):
         self.train_acc.update(probs, labels.long())
 
         return loss
-    
+
     def on_train_epoch_end(self):
         self.log('train_auroc', self.train_acc.compute())
         self.train_acc.reset()
 
-    def validation_step(self, batch, batch_index):
+    def validation_step(self, batch, batch_idx):
         images, labels = batch
 
         logits = self(images)
@@ -82,12 +83,12 @@ class ConvNextModel(pl.LightningModule):
         self.val_acc.update(probs, labels.long())
 
         return loss
-    
+
     def on_validation_epoch_end(self):
         self.log('val_auroc', self.val_acc.compute())
         self.val_acc.reset()
 
-    def test_step(self, batch, batch_index):
+    def test_step(self, batch, batch_idx):
         images, labels = batch
 
         probs = torch.sigmoid(self(images))
@@ -95,11 +96,11 @@ class ConvNextModel(pl.LightningModule):
         self.test_acc.update(probs, labels.long())
 
         self.log('test_auroc', self.test_acc.compute())
-        
+
         self.test_acc.reset()
         return {'probs' : probs, 'labels' : labels}
-    
-    def predict_step(self, batch, batch_index):
+
+    def predict_step(self, batch, batch_idx):
         images = batch
 
         with torch.no_grad():

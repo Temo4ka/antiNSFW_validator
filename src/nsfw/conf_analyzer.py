@@ -1,8 +1,9 @@
 from torchvision import transforms as T
 
+
 def create_transforms(transform_config):
     transform_list = []
-    
+
     for transform_name, transform_params in transform_config.items():
         if transform_name == 'RandomResizedCrop':
             transform_list.append(T.RandomResizedCrop(tuple(transform_params['size'])))
@@ -30,6 +31,5 @@ def create_transforms(transform_config):
                 mean=transform_params['mean'],
                 std=transform_params['std']
             ))
-    
-    return T.Compose(transform_list)
 
+    return T.Compose(transform_list)

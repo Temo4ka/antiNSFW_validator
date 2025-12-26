@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchmetrics import Accuracy
 
+
 class CNNBaselineModel(pl.LightningModule):
     def __init__(self, config):
         super().__init__()
@@ -12,16 +13,16 @@ class CNNBaselineModel(pl.LightningModule):
         ##Features extraction
         self.extractor = nn.Sequential(
             nn.Conv2d(3, 32, config['CNN']['conv1']['kernel_size'],
-                             config['CNN']['conv1']['stride'], 
+                             config['CNN']['conv1']['stride'],
                              config['CNN']['conv1']['padding']),
             nn.ReLU(),
             nn.MaxPool2d(config['CNN']['pool1']['kernel_size'],
                          config['CNN']['pool1']['stride']),
             nn.Conv2d(32, 64, config['CNN']['conv2']['kernel_size'],
-                             config['CNN']['conv2']['stride'], 
+                             config['CNN']['conv2']['stride'],
                              config['CNN']['conv2']['padding']),
             nn.ReLU(),
-            nn.MaxPool2d(config['CNN']['pool2']['kernel_size'], 
+            nn.MaxPool2d(config['CNN']['pool2']['kernel_size'],
                          config['CNN']['pool2']['stride']),
         )
 
@@ -50,31 +51,33 @@ class CNNBaselineModel(pl.LightningModule):
         images, labels = batch
         outputs = self(images)
         loss = F.binary_cross_entropy_with_logits(outputs, labels)
-        
+
         self.log('train_loss', loss)
-        
+
         probs = torch.sigmoid(outputs)
         self.train_acc.update(probs, labels.long())
-        
+
         return loss
-    
+
     def validation_step(self, batch, batch_idx):
         images, labels = batch
         outputs = self(images)
         loss = F.binary_cross_entropy_with_logits(outputs, labels)
-        
+
         self.log('val_loss', loss)
-        
+
         probs = torch.sigmoid(outputs)
         self.val_acc.update(probs, labels.long())
-    
+
+        return loss
+
     def test_step(self, batch, batch_idx):
         images, labels = batch
         outputs = self(images)
         loss = F.binary_cross_entropy_with_logits(outputs, labels)
-        
+
         self.log('test_loss', loss)
-        
+
         probs = torch.sigmoid(outputs)
         self.test_acc.update(probs, labels.long())
 

@@ -6,3 +6,10 @@ precision: 32
 enable_progress_bar: true
 enable_model_summary: true
 
+# Настройки сохранения чекпоинтов
+checkpoint:
+  dirpath: "checkpoints"
+  filename: "best-{epoch:02d}-{val_auroc:.2f}"
+  monitor: "val_auroc"
+  mode: "max"
+  save_top_k: 1

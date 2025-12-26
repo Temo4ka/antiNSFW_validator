@@ -1,7 +1,8 @@
 import pathlib
-from torchvision.transforms import transforms
-from torch.utils.data import Dataset
+
 from PIL import Image
+from torch.utils.data import Dataset
+from torchvision.transforms import transforms
 
 HEIGHT = 200
 WIDTH = 200
@@ -18,7 +19,7 @@ class ImageDataSet(Dataset):
             return image, self.labels[index]
 
         return self.transformer(image), self.labels[index]
-    
+
     def __len__(self):
         return len(self.labels)
 
@@ -29,8 +30,8 @@ def LoadDataFrom(path: str, label,  type = '*.jpg'):
     labels = [label] * len(imageList)
 
     return imageList, labels
-    
-    
+
+
 
 if __name__ == '__main__':
     transformer = transforms.Compose([

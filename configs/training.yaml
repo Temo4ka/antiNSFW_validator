@@ -7,4 +7,3 @@ pos_weight: 1.0  # Баланс классов для binary cross entropy
 
 # Параметры для PyTorch Lightning Trainer
 max_epochs: 10
-

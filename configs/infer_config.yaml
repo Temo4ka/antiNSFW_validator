@@ -1,0 +1,15 @@
+# @package _global_
+
+# Конфигурация для инференса
+# Композирует data.yaml для использования трансформаций
+
+defaults:
+  - data: data.yaml
+  - _self_
+
+# Параметры инференса (можно переопределить через CLI)
+checkpoint: "checkpoints/best.ckpt"
+input_dir: "data/test_images"
+output: "predictions.csv"
+batch_size: 32
+threshold: 0.5

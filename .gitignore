@@ -158,6 +158,9 @@ cython_debug/
 *.tflite
 *.hdf5
 
+# Checkpoints directory
+checkpoints/
+
 # MLflow
 .mlflow/
 mlruns/
