@@ -1,4 +1,3 @@
-from re import S
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import TensorBoardLogger
 from torch.utils.data import DataLoader
@@ -19,5 +18,8 @@ class Trainer:
         self.trainer.fit(self.model, trainLoader, valLoader)
 
     def test(self, testLoader):
-        self.trainer.test(self.model, testLoader)  
+        self.trainer.test(self.model, testLoader)
     
+    def predict(self, predictLoader):
+        predictions = self.trainer.predict(self.model, predictLoader)
+        return predictions

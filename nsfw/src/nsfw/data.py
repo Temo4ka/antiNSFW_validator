@@ -1,5 +1,4 @@
 import pathlib
-import os
 from torchvision.transforms import transforms
 from torch.utils.data import Dataset
 from PIL import Image
@@ -15,7 +14,7 @@ class ImageDataSet(Dataset):
 
     def __getitem__(self, index):
         image = Image.open(self.imageList[index])
-        if (self.transformer == None):
+        if self.transformer is None:
             return image, self.labels[index]
 
         return self.transformer(image), self.labels[index]
@@ -33,8 +32,8 @@ def LoadDataFrom(path: str, label,  type = '*.jpg'):
     
     
 
-if (__name__ == '__main__'):
-    transformer =transforms.Compose([
+if __name__ == '__main__':
+    transformer = transforms.Compose([
             transforms.ToTensor(),
             transforms.Resize((HEIGHT, WIDTH))
         ])

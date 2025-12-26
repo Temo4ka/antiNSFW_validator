@@ -27,17 +27,18 @@ class ConvNextModel(pl.LightningModule):
             nn.Linear(self.features_dim, config['model']['num_classes'])
         )
 
-        self.optimizer = torch.optim.AdamW(
-            self.backbone.parameters(),
-            lr = self.config['optimizer']['learning_rate'],
-            weight_decay = self.config['training']['weight_decay']
-        )
+        self.pos_weight = torch.tensor(config['training']['pos_weight'])
 
         self.train_acc = AUROC(task='binary')
         self.val_acc = AUROC(task='binary')
         self.test_acc = AUROC(task='binary')
 
     def configure_optimizers(self):
+        self.optimizer = torch.optim.AdamW(
+            self.parameters(),
+            lr = self.config['optimizer']['learning_rate'],
+            weight_decay = self.config['training']['weight_decay']
+        )
         return self.optimizer
 
     def forward(self, x):
@@ -53,6 +54,8 @@ class ConvNextModel(pl.LightningModule):
             labels,
             pos_weight = torch.tensor(self.config['training']['pos_weight'])
         )
+
+        self.log('train_loss', loss)
 
         probs = torch.sigmoid(logits)
         self.train_acc.update(probs, labels.long())
@@ -73,13 +76,15 @@ class ConvNextModel(pl.LightningModule):
             labels
          )
 
+        self.log('val_loss', loss)
+
         probs = torch.sigmoid(logits)
         self.val_acc.update(probs, labels.long())
 
         return loss
     
     def on_validation_epoch_end(self):
-        self.val_acc.compute()
+        self.log('val_auroc', self.val_acc.compute())
         self.val_acc.reset()
 
     def test_step(self, batch, batch_index):
@@ -90,6 +95,7 @@ class ConvNextModel(pl.LightningModule):
         self.test_acc.update(probs, labels.long())
 
         self.log('test_auroc', self.test_acc.compute())
+        
         self.test_acc.reset()
         return {'probs' : probs, 'labels' : labels}
     
