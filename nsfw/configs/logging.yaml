@@ -1,0 +1,12 @@
+# Конфигурация логирования
+
+logger: "tensorboard"  # tensorboard, mlflow, wandb
+
+tensorboard:
+  save_dir: "logs"
+  name: "nsfw_model"
+
+mlflow:
+  tracking_uri: "http://127.0.0.1:8080"
+  experiment_name: "nsfw_detection"
+

@@ -2,18 +2,12 @@ import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from pytorch_lightning.loggers import CSVLogger
-from torchmetrics import AUROC
-import timm
+from torchmetrics import Accuracy
 
 class CNNBaselineModel(pl.LightningModule):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.logger = CSVLogger(
-                        save_dir='./logs/baseline',
-                        name='experiment_1'
-                    )
 
         ##Features extraction
         self.extractor = nn.Sequential(
@@ -32,7 +26,7 @@ class CNNBaselineModel(pl.LightningModule):
         )
 
         with torch.no_grad():
-            dummy = torch.zeros(1, 3, config['CNN']['input_size'])
+            dummy = torch.zeros(1, 3, config['CNN']['input_size'], config['CNN']['input_size'])
             features = self.extractor(dummy)
             flattened_size = features.view(1, -1).size(1)
 
@@ -43,11 +37,9 @@ class CNNBaselineModel(pl.LightningModule):
             nn.Linear(128, 1),
         )
 
-        self.optimizer = torch.optim.Adam(
-            self.classifier.parameters(),
-            lr = self.config['optimizer']['learning_rate'],
-            weight_decay = self.config['training']['weight_decay']
-        )
+        self.train_acc = Accuracy(task='binary')
+        self.val_acc = Accuracy(task='binary')
+        self.test_acc = Accuracy(task='binary')
 
     def forward(self, x):
         features = self.extractor(x)
@@ -57,30 +49,51 @@ class CNNBaselineModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         images, labels = batch
         outputs = self(images)
-        loss = F.binary_cross_entropy(outputs, labels)
-        self.logger.log_metrics({
-            'train_loss': loss,
-            'train_accuracy': accuracy(outputs, labels)
-        })
+        loss = F.binary_cross_entropy_with_logits(outputs, labels)
+        
+        self.log('train_loss', loss)
+        
+        probs = torch.sigmoid(outputs)
+        self.train_acc.update(probs, labels.long())
+        
         return loss
     
     def validation_step(self, batch, batch_idx):
         images, labels = batch
         outputs = self(images)
-        loss = F.binary_cross_entropy(outputs, labels)
-        self.logger.log_metrics({
-            'val_loss': loss,
-            'val_accuracy': accuracy(outputs, labels)
-        })
+        loss = F.binary_cross_entropy_with_logits(outputs, labels)
+        
+        self.log('val_loss', loss)
+        
+        probs = torch.sigmoid(outputs)
+        self.val_acc.update(probs, labels.long())
     
     def test_step(self, batch, batch_idx):
         images, labels = batch
         outputs = self(images)
-        loss = F.binary_cross_entropy(outputs, labels)
-        self.logger.log_metrics({
-            'test_loss': loss,
-            'test_accuracy': accuracy(outputs, labels)
-        })
+        loss = F.binary_cross_entropy_with_logits(outputs, labels)
+        
+        self.log('test_loss', loss)
+        
+        probs = torch.sigmoid(outputs)
+        self.test_acc.update(probs, labels.long())
+
+    def on_train_epoch_end(self):
+        self.log('train_accuracy', self.train_acc.compute())
+        self.train_acc.reset()
+
+    def on_validation_epoch_end(self):
+        self.log('val_accuracy', self.val_acc.compute())
+        self.val_acc.reset()
+
+    def on_test_epoch_end(self):
+        self.log('test_accuracy', self.test_acc.compute())
+        self.test_acc.reset()
 
     def configure_optimizers(self):
-        return self.optimizer
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=self.config['optimizer']['learning_rate'],
+            weight_decay=self.config['training']['weight_decay']
+        )
+        return optimizer

@@ -34,12 +34,12 @@ class ConvNextModel(pl.LightningModule):
         self.test_acc = AUROC(task='binary')
 
     def configure_optimizers(self):
-        self.optimizer = torch.optim.AdamW(
+        optimizer = torch.optim.AdamW(
             self.parameters(),
-            lr = self.config['optimizer']['learning_rate'],
-            weight_decay = self.config['training']['weight_decay']
+            lr=self.config['optimizer']['learning_rate'],
+            weight_decay=self.config['training']['weight_decay']
         )
-        return self.optimizer
+        return optimizer  
 
     def forward(self, x):
         return self.classifier(self.backbone(x))
@@ -52,7 +52,7 @@ class ConvNextModel(pl.LightningModule):
         loss = F.binary_cross_entropy_with_logits(
             logits,
             labels,
-            pos_weight = torch.tensor(self.config['training']['pos_weight'])
+            pos_weight=self.pos_weight 
         )
 
         self.log('train_loss', loss)

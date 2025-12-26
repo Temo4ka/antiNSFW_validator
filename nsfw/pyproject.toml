@@ -1,19 +1,47 @@
 [project]
 name = "nsfw"
 version = "0.1.0"
-description = ""
+description = "NSFW content detection model using PyTorch Lightning"
 authors = [
     {name = "Temo4ka",email = "artemy.bukin@yandex.ru"}
 ]
 readme = "README.md"
 requires-python = ">=3.13,<3.15"
 dependencies = [
-    "pandas (>=2.3.3,<3.0.0)",
-    "torchvision (>=0.24.1,<0.25.0)"
+    # PyTorch ecosystem
+    "torch>=2.0.0",
+    "torchvision>=0.24.1,<0.25.0",
+    "pytorch-lightning>=2.0.0",
+    "torchmetrics>=1.0.0",
+    # Model architectures
+    "timm>=0.9.0",
+    # Configuration management
+    "hydra-core>=1.3.0",
+    "omegaconf>=2.3.0",
+    # Image processing
+    "pillow>=10.0.0",
+    # Data management (from requirements)
+    "dvc>=3.0.0",
+    # Logging
+    "mlflow>=2.0.0",
+    # Data processing
+    "pandas>=2.3.3,<3.0.0",
+    # Model export (for production)
+    "onnx>=1.15.0",
+    "onnxruntime>=1.16.0",
 ]
 
 [tool.poetry]
 packages = [{include = "nsfw", from = "src"}]
+
+[project.optional-dependencies]
+dev = [
+    # Code quality tools (from requirements)
+    "pre-commit>=3.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

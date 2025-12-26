@@ -1,0 +1,8 @@
+# Конфигурация PyTorch Lightning Trainer
+
+accelerator: "auto"
+devices: 1
+precision: 32
+enable_progress_bar: true
+enable_model_summary: true
+

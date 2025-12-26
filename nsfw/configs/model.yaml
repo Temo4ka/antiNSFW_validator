@@ -1,0 +1,11 @@
+# Конфигурация модели
+
+model_name: "convnext_tiny"  # Название модели из timm
+pretrained: true
+num_classes: 1  # Binary classification
+
+# Параметры классификатора
+classifier:
+  dropout: 0.4
+  layer_norm_eps: 1e-6
+

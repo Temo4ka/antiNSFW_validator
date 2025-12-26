@@ -1,0 +1,5 @@
+# Конфигурация оптимизатора
+
+optimizer_name: "AdamW"
+learning_rate: 0.0001
+

@@ -1,0 +1,13 @@
+# @package _global_
+
+defaults:
+  - data: data.yaml
+  - model: model.yaml
+  - training: training.yaml
+  - optimizer: optimizer.yaml
+  - logging: logging.yaml
+  - trainer: trainer.yaml
+
+# Можно добавить общие параметры здесь, если нужно
+seed: 42
+
