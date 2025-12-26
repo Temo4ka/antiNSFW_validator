@@ -1,0 +1,6 @@
+outs:
+- md5: 3562b3f9a7945dacc97368a19df1c75e.dir
+  size: 168484135
+  nfiles: 603
+  hash: md5
+  path: nsfw

@@ -197,10 +197,13 @@ wandb/
 *.pkl
 *.pickle
 data/
-dataset/
 datasets/
 data/raw/
 data/processed/
+
+# DVC dataset directories - игнорируем содержимое, но не .dvc файлы
+src/dataset/nsfw/
+src/dataset/sfw/
 
 # DVC
 .dvc/cache/
