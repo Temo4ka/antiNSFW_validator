@@ -26,6 +26,8 @@ dependencies = [
     "mlflow>=2.0.0",
     # Data processing
     "pandas>=2.3.3,<3.0.0",
+    # Visualization
+    "matplotlib>=3.8.0",
     # Model export (for production)
     "onnx>=1.15.0",
     "onnxruntime>=1.16.0",
@@ -45,7 +47,7 @@ flake8 = ">=6.0.0"
 
 [tool.black]
 line-length = 88
-target-version = ['py313']
+target-version = ['py312']
 include = '\.pyi?$'
 extend-exclude = '''
 /(

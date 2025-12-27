@@ -1,0 +1,6 @@
+artifact_location: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/236451232755784722
+creation_time: 1766797629160
+experiment_id: '236451232755784722'
+last_update_time: 1766797629160
+lifecycle_stage: active
+name: nsfw_detection

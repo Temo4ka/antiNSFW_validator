@@ -20,7 +20,7 @@ def main(cfg: DictConfig):
     model = ConvNextModel.load_from_checkpoint(cfg.checkpoint)
     model.eval()
 
-    images, _ = LoadDataFrom(cfg.input_dir, label=0.0, type=pattern)
+    images, _labels = LoadDataFrom(cfg.input_dir, label=0.0, type=pattern)
 
     if len(images) == 0:
         print(f"Warning: No images found in {cfg.input_dir} with pattern {pattern}")
@@ -39,10 +39,10 @@ def main(cfg: DictConfig):
         batch_size=cfg.batch_size,
         num_workers=0,
         shuffle=False,
-        collate_fn=collate_fn
+        collate_fn=collate_fn,
     )
 
-    trainer = pl.Trainer(accelerator='auto', devices=1, logger=False)
+    trainer = pl.Trainer(accelerator="auto", devices=1, logger=False)
 
     predictions = trainer.predict(model, dataloader)
 
@@ -50,22 +50,24 @@ def main(cfg: DictConfig):
     all_preds = []
 
     for batch_result in predictions:
-        probs = batch_result['probs'].cpu().numpy()
-        preds = batch_result['preds'].cpu().numpy()
+        probs = batch_result["probs"].cpu().numpy()
+        preds = batch_result["preds"].cpu().numpy()
         all_probs.extend(probs.flatten())
         all_preds.extend(preds.flatten())
 
-    results = pd.DataFrame({
-        'image_path': images,
-        'probability': all_probs,
-        'prediction': all_preds.astype(int),
-        'class_name': ['NSFW' if p > cfg.threshold else 'SFW' for p in all_probs]
-    })
+    results = pd.DataFrame(
+        {
+            "image_path": images,
+            "probability": all_probs,
+            "prediction": all_preds.astype(int),
+            "class_name": ["NSFW" if p > cfg.threshold else "SFW" for p in all_probs],
+        }
+    )
 
     output = pathlib.Path(cfg.output)
-    if output.suffix == '.json':
-        results_dict = results.to_dict('records')
-        with open(output, 'w') as f:
+    if output.suffix == ".json":
+        results_dict = results.to_dict("records")
+        with open(output, "w") as f:
             json.dump(results_dict, f, indent=2)
     else:
         results.to_csv(output, index=False)

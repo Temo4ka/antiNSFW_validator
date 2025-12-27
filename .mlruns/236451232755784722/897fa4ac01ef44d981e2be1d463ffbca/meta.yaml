@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/236451232755784722/897fa4ac01ef44d981e2be1d463ffbca/artifacts
+end_time: 1766797633373
+entry_point_name: ''
+experiment_id: '236451232755784722'
+lifecycle_stage: active
+run_id: 897fa4ac01ef44d981e2be1d463ffbca
+run_name: learned-duck-258
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766797629312
+status: 4
+tags: []
+user_id: temo4ka

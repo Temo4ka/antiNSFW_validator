@@ -1,0 +1,2 @@
+- mlflow.experiment_name=nsfw_detection
+- plots.output_dir=plots

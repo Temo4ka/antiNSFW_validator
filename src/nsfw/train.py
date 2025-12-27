@@ -32,19 +32,15 @@ def shuffle_and_split_data(data, labels, split_ratio=0.8, seed=42):
 
 @hydra.main(version_base=None, config_path="../../configs", config_name="config")
 def main(cfg: DictConfig):
-    if 'seed' in cfg:
+    if "seed" in cfg:
         torch.manual_seed(cfg.seed)
         random.seed(cfg.seed)
 
     nsfw_images, nsfw_labels = LoadDataFrom(
-        cfg.data.paths.nsfw_dir,
-        cfg.data.paths.nsfw_label,
-        cfg.data.paths.file_pattern
+        cfg.data.paths.nsfw_dir, cfg.data.paths.nsfw_label, cfg.data.paths.file_pattern
     )
     sfw_images, sfw_labels = LoadDataFrom(
-        cfg.data.paths.sfw_dir,
-        cfg.data.paths.sfw_label,
-        cfg.data.paths.file_pattern
+        cfg.data.paths.sfw_dir, cfg.data.paths.sfw_label, cfg.data.paths.file_pattern
     )
 
     all_images = nsfw_images + sfw_images
@@ -54,7 +50,7 @@ def main(cfg: DictConfig):
         all_images,
         all_labels,
         split_ratio=cfg.data.split.ratio,
-        seed=cfg.data.split.seed
+        seed=cfg.data.split.seed,
     )
 
     # Создание transforms из конфига
@@ -70,23 +66,27 @@ def main(cfg: DictConfig):
         train_dataset,
         batch_size=cfg.training.batch_size,
         num_workers=cfg.training.num_workers,
-        shuffle=True
+        shuffle=True,
     )
     val_loader = DataLoader(
         val_dataset,
         batch_size=cfg.training.batch_size,
         num_workers=cfg.training.num_workers,
-        shuffle=False
+        shuffle=False,
     )
 
     config_dict = OmegaConf.to_container(cfg, resolve=True)
 
-    if 'CNN' in config_dict:
+    if "CNN" in config_dict:
         model = CNNBaselineModel(config_dict)
     else:
         model = ConvNextModel(config_dict)
 
-    git_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], stderr=subprocess.DEVNULL).decode().strip()
+    git_commit = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL)
+        .decode()
+        .strip()
+    )
 
     logger = MLFlowLogger(
         experiment_name=cfg.logging.mlflow.experiment_name,
@@ -118,5 +118,5 @@ def main(cfg: DictConfig):
     trainer.fit(model, train_loader, val_loader)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

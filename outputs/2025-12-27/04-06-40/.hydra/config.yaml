@@ -1,0 +1,87 @@
+seed: 42
+data:
+  paths:
+    nsfw_dir: src/dataset/nsfw
+    sfw_dir: src/dataset/sfw
+    file_pattern: '*.jpg'
+    nsfw_label: 1.0
+    sfw_label: 0.0
+  image_size:
+    height: 200
+    width: 200
+  split:
+    ratio: 0.8
+    seed: 42
+  train_transforms:
+    RandomResizedCrop:
+      size:
+      - 200
+      - 200
+    RandomHorizontalFlip:
+      p: 0.5
+    RandomRotation:
+      degrees: 10
+    ColorJitter:
+      brightness: 0.2
+      contrast: 0.2
+      saturation: 0.2
+      hue: 0.1
+    GaussianBlur:
+      kernel_size: 3
+    ToTensor: {}
+    Normalize:
+      mean:
+      - 0.485
+      - 0.456
+      - 0.406
+      std:
+      - 0.229
+      - 0.224
+      - 0.225
+  val_transforms:
+    Resize:
+      size:
+      - 200
+      - 200
+    ToTensor: {}
+    Normalize:
+      mean:
+      - 0.485
+      - 0.456
+      - 0.406
+      std:
+      - 0.229
+      - 0.224
+      - 0.225
+model:
+  model_name: convnext_tiny
+  pretrained: true
+  num_classes: 1
+  classifier:
+    dropout: 0.4
+    layer_norm_eps: 1.0e-06
+training:
+  batch_size: 32
+  num_workers: 4
+  weight_decay: 0.0001
+  pos_weight: 1.0
+  max_epochs: 10
+optimizer:
+  optimizer_name: AdamW
+  learning_rate: 0.0001
+logging:
+  mlflow:
+    tracking_uri: file:.mlruns
+    experiment_name: nsfw_detection
+trainer:
+  accelerator: auto
+  devices: 1
+  precision: 32
+  enable_progress_bar: true
+  enable_model_summary: true
+  checkpoint:
+    dirpath: checkpoints
+    filename: best-{epoch:02d}-{val_auroc:.2f}
+    monitor: val_auroc
+    mode: max
+    save_top_k: 1

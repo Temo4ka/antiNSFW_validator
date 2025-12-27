@@ -302,6 +302,40 @@ python -m nsfw.train \
 - `train_loss`, `val_loss` - функции потерь
 - `train_accuracy`, `val_accuracy` - Accuracy метрики
 
+### Генерация графиков метрик
+
+После обучения можно сгенерировать графики метрик из MLflow:
+
+```bash
+# Генерация графиков из последнего эксперимента (использует configs/plots_config.yaml)
+python -m nsfw.generate_plots
+
+# С указанием конкретного эксперимента
+python -m nsfw.generate_plots mlflow.experiment_name=nsfw_detection
+
+# С указанием конкретного run
+python -m nsfw.generate_plots mlflow.run_id=<run_id>
+
+# С указанием MLflow сервера
+python -m nsfw.generate_plots mlflow.tracking_uri=http://127.0.0.1:8080
+
+# Изменить директорию для сохранения графиков
+python -m nsfw.generate_plots plots.output_dir=my_plots
+
+# Комбинация параметров
+python -m nsfw.generate_plots \
+    mlflow.experiment_name=nsfw_detection \
+    mlflow.tracking_uri=http://127.0.0.1:8080 \
+    plots.output_dir=plots
+```
+
+Графики будут сохранены в директорию `plots/` (или указанную в конфиге):
+- `loss_curves.png` - график train и val loss
+- `auroc_curves.png` - график train и val AUROC
+- `combined_metrics.png` - комбинированный график всех метрик
+
+Конфигурация находится в `configs/plots_config.yaml` и может быть изменена там или через CLI параметры.
+
 ## Production Preparation
 
 ### Экспорт в ONNX

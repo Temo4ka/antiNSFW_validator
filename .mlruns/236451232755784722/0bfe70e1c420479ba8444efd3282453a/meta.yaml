@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/236451232755784722/0bfe70e1c420479ba8444efd3282453a/artifacts
+end_time: 1766797671236
+entry_point_name: ''
+experiment_id: '236451232755784722'
+lifecycle_stage: active
+run_id: 0bfe70e1c420479ba8444efd3282453a
+run_name: classy-rat-310
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766797668091
+status: 4
+tags: []
+user_id: temo4ka

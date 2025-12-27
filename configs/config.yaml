@@ -1,6 +1,7 @@
 # @package _global_
 
 defaults:
+  - _self_
   - data: data.yaml
   - model: model.yaml
   - training: training.yaml

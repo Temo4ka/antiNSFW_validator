@@ -1,0 +1,14 @@
+# @package _global_
+
+# Конфигурация для генерации графиков из MLflow
+
+# Параметры MLflow
+mlflow:
+  tracking_uri: "file:.mlruns"
+  experiment_name: "nsfw_detection"
+  run_id: null  # Если null, используется последний run из эксперимента
+
+# Параметры генерации графиков
+plots:
+  output_dir: "plots"
+  dpi: 300

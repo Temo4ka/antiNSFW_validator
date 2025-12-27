@@ -1,0 +1,9 @@
+Checkpoint:
+  _every_n_train_steps: 0
+  mode: max
+  monitor: val_auroc
+  save_last: null
+  save_top_k: 1
+  save_weights_only: false
+original_filename: best-epoch=07-val_auroc=1.00.ckpt
+score: 0.9987117052078247

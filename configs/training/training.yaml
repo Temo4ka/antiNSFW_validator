@@ -1,0 +1,9 @@
+# Конфигурация обучения
+
+batch_size: 32
+num_workers: 4
+weight_decay: 0.0001
+pos_weight: 1.0  # Баланс классов для binary cross entropy
+
+# Параметры для PyTorch Lightning Trainer
+max_epochs: 10
