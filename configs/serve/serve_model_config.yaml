@@ -3,7 +3,7 @@
 # Конфигурация для запуска MLflow Serving сервера
 
 defaults:
-  - mlflow_model: mlflow_model_config.yaml
+  - mlflow_model: ../mlflow_model/mlflow_model_config.yaml
   - _self_
 
 # Путь к чекпоинту модели

@@ -1,5 +1,3 @@
-"""Утилиты для работы с DVC."""
-
 import pathlib
 
 from dvc.repo import Repo

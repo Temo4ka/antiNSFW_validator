@@ -10,7 +10,9 @@ from nsfw.mlflow_model import NSFWModelWrapper
 
 
 @hydra.main(
-    version_base=None, config_path="../../configs", config_name="serve_model_config"
+    version_base=None,
+    config_path="../../configs/serve",
+    config_name="serve_model_config",
 )
 def main(cfg: DictConfig):
     mlflow.set_tracking_uri(cfg.mlflow.tracking_uri)

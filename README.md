@@ -84,7 +84,7 @@
 - Полносвязные слои для классификации
 - Binary Cross Entropy Loss
 
-**Конфигурация**: `configs/config_baseline.yaml`
+**Конфигурация**: `configs/train/config_baseline.yaml`
 
 ### Основная модель
 
@@ -96,7 +96,7 @@
 - LayerNorm и Dropout для регуляризации
 - Binary Cross Entropy Loss with pos_weight для балансировки классов
 
-**Конфигурация**: `configs/config.yaml`
+**Конфигурация**: `configs/train/config.yaml`
 
 ### Обучение
 
@@ -119,20 +119,33 @@
 ```
 nsfw/
 ├── configs/                 # Hydra конфигурации
-│   ├── config.yaml          # Главный конфиг для ConvNext модели
-│   ├── config_baseline.yaml # Конфиг для baseline CNN модели
-│   ├── data.yaml            # Конфигурация данных
-│   ├── model.yaml           # Параметры модели
-│   ├── training.yaml        # Параметры обучения
-│   ├── optimizer.yaml       # Параметры оптимизатора
-│   ├── trainer.yaml         # Параметры PyTorch Lightning Trainer
-│   ├── trainer_baseline.yaml # Trainer для baseline модели
-│   ├── logging.yaml         # Настройки логирования (MLflow)
-│   ├── infer_config.yaml    # Конфигурация для локального инференса
-│   ├── export_onnx_config.yaml # Конфигурация для экспорта в ONNX
-│   ├── serve_model_config.yaml # Конфигурация для MLflow Serving
-│   ├── register_model_config.yaml # Конфигурация для регистрации модели
-│   ├── plots_config.yaml    # Конфигурация для генерации графиков
+│   ├── train/               # Конфигурации для обучения
+│   │   ├── config.yaml      # Главный конфиг для ConvNext модели
+│   │   └── config_baseline.yaml # Конфиг для baseline CNN модели
+│   ├── data/                # Конфигурация данных
+│   │   └── data.yaml
+│   ├── model/               # Параметры моделей
+│   │   ├── model.yaml
+│   │   └── baseline_model.yaml
+│   ├── training/            # Параметры обучения
+│   │   └── training.yaml
+│   ├── optimizer/           # Параметры оптимизатора
+│   │   └── optimizer.yaml
+│   ├── trainer/             # Параметры PyTorch Lightning Trainer
+│   │   ├── trainer.yaml
+│   │   └── trainer_baseline.yaml
+│   ├── logging/             # Настройки логирования (MLflow)
+│   │   └── logging.yaml
+│   ├── infer/               # Конфигурация для локального инференса
+│   │   └── infer_config.yaml
+│   ├── export/              # Конфигурация для экспорта в ONNX
+│   │   └── export_onnx_config.yaml
+│   ├── serve/               # Конфигурация для MLflow Serving
+│   │   └── serve_model_config.yaml
+│   ├── register/            # Конфигурация для регистрации модели
+│   │   └── register_model_config.yaml
+│   ├── plots/               # Конфигурация для генерации графиков
+│   │   └── plots_config.yaml
 │   └── mlflow_model/        # Конфигурация для MLflow модели
 │       └── mlflow_model_config.yaml # Параметры препроцессинга
 ├── src/
@@ -246,7 +259,7 @@ dvc pull
 
 ### Настройка MLflow
 
-MLflow настроен на локальное хранилище (`.mlruns/`) по умолчанию. Для использования MLflow сервера измените `configs/logging.yaml`:
+MLflow настроен на локальное хранилище (`.mlruns/`) по умолчанию. Для использования MLflow сервера измените `configs/logging/logging.yaml`:
 
 ```yaml
 mlflow:
@@ -269,7 +282,7 @@ mlflow ui --port 8080
 python -m nsfw.train
 ```
 
-Команда использует конфигурацию по умолчанию из `configs/config.yaml`.
+Команда использует конфигурацию по умолчанию из `configs/train/config.yaml`.
 
 ### Обучение baseline модели (CNN)
 
@@ -336,7 +349,7 @@ python -m nsfw.train \
 После обучения можно сгенерировать графики метрик из MLflow:
 
 ```bash
-# Генерация графиков из последнего эксперимента (использует configs/plots_config.yaml)
+# Генерация графиков из последнего эксперимента (использует configs/plots/plots_config.yaml)
 python -m nsfw.generate_plots
 
 # С указанием конкретного эксперимента
@@ -363,7 +376,7 @@ python -m nsfw.generate_plots \
 - `auroc_curves.png` - график train и val AUROC
 - `combined_metrics.png` - комбинированный график всех метрик
 
-Конфигурация находится в `configs/plots_config.yaml` и может быть изменена там или через CLI параметры.
+Конфигурация находится в `configs/plots/plots_config.yaml` и может быть изменена там или через CLI параметры.
 
 ## Production Preparation
 
@@ -372,7 +385,7 @@ python -m nsfw.generate_plots \
 Для конвертации модели в ONNX формат (для продакшена):
 
 ```bash
-# Базовое использование (из configs/export_onnx_config.yaml)
+# Базовое использование (из configs/export/export_onnx_config.yaml)
 python -m nsfw.export_onnx
 
 # С указанием конкретного чекпоинта
@@ -414,7 +427,7 @@ TensorRT экспорт не реализован в данном проекте
 - Модель: зарегистрирована в MLflow Model Registry
 - Препроцессинг: встроен в модель через `mlflow_model.py`
 - API: REST API через MLflow Serving
-- Конфигурация: загружается автоматически из `configs/config.yaml`
+- Конфигурация: загружается автоматически из `configs/train/config.yaml`
 
 **Преимущества:**
 - Автоматический препроцессинг
@@ -436,7 +449,7 @@ TensorRT экспорт не реализован в данном проекте
 - `model.py` или `baseline_model.py` - определение модели
 - `data.py` - загрузка данных
 - `conf_analyzer.py` - создание трансформаций
-- Конфигурационные файлы из `configs/`
+- Конфигурационные файлы из `configs/` (структурированы по папкам)
 - Чекпоинт модели
 
 ## Infer
@@ -490,10 +503,10 @@ python -m nsfw.serve_model \
 
 Эта команда:
 - Регистрирует модель в MLflow Model Registry (версионирование автоматически)
-- Загружает конфигурацию из `configs/config.yaml` для инициализации модели
+- Загружает конфигурацию из `configs/train/config.yaml` для инициализации модели
 - Автоматически запускает serving сервер на указанном порту
 
-**Примечание:** Конфигурация модели автоматически загружается из `configs/config.yaml` при отсутствии гиперпараметров в чекпоинте.
+**Примечание:** Конфигурация модели автоматически загружается из `configs/train/config.yaml` при отсутствии гиперпараметров в чекпоинте.
 
 #### 2. Запуск сервера вручную
 
@@ -585,7 +598,7 @@ print(result)
 
 #### 5. Конфигурация сервера
 
-Настройки сервера можно изменить в `configs/serve_model_config.yaml`:
+Настройки сервера можно изменить в `configs/serve/serve_model_config.yaml`:
 
 ```yaml
 serving:
@@ -634,7 +647,7 @@ python -m nsfw.serve_model
 
 **Примечание:** После изменений в `mlflow_model.py` необходимо перерегистрировать модель в MLflow Model Registry (новая версия будет создана автоматически).
 
-Или изменить в `configs/infer_config.yaml`:
+Или изменить в `configs/infer/infer_config.yaml`:
 
 ```yaml
 checkpoint: "checkpoints/best.ckpt"
@@ -714,11 +727,11 @@ data/test_images/img2.jpg,0.12,0,SFW
 
 ### Конфигурация проекта
 
-Проект использует Hydra для управления конфигурациями. Все гиперпараметры вынесены в YAML файлы в `configs/`:
+Проект использует Hydra для управления конфигурациями. Все гиперпараметры вынесены в YAML файлы в `configs/`, структурированные по папкам:
 
 **Основные конфигурации:**
-- `config.yaml` - главный конфиг для ConvNext модели
-- `config_baseline.yaml` - конфиг для baseline CNN модели
+- `train/config.yaml` - главный конфиг для ConvNext модели
+- `train/config_baseline.yaml` - конфиг для baseline CNN модели
 - `data.yaml` - параметры данных и трансформаций
 - `model.yaml` - архитектура модели
 - `training.yaml` - параметры обучения
@@ -727,11 +740,11 @@ data/test_images/img2.jpg,0.12,0,SFW
 - `logging.yaml` - настройки MLflow
 
 **Конфигурации для инференса и продакшена:**
-- `infer_config.yaml` - конфигурация для локального инференса
-- `export_onnx_config.yaml` - параметры экспорта в ONNX
-- `serve_model_config.yaml` - настройки MLflow Serving сервера
-- `register_model_config.yaml` - параметры регистрации модели
-- `plots_config.yaml` - настройки генерации графиков
+- `infer/infer_config.yaml` - конфигурация для локального инференса
+- `export/export_onnx_config.yaml` - параметры экспорта в ONNX
+- `serve/serve_model_config.yaml` - настройки MLflow Serving сервера
+- `register/register_model_config.yaml` - параметры регистрации модели
+- `plots/plots_config.yaml` - настройки генерации графиков
 - `mlflow_model/mlflow_model_config.yaml` - параметры препроцессинга для MLflow модели
 
 Все конфигурации можно переопределить через CLI параметры Hydra.
@@ -805,7 +818,7 @@ mlflow ui --backend-store-uri http://127.0.0.1:8080
 
 **Конфигурация:**
 - Все гиперпараметры вынесены в YAML конфиги через Hydra
-- Конфигурация модели автоматически загружается из `configs/config.yaml` при отсутствии в чекпоинте
+- Конфигурация модели автоматически загружается из `configs/train/config.yaml` при отсутствии в чекпоинте
 - Поддержка иерархических конфигов
 
 **Логирование:**

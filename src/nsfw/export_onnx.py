@@ -8,7 +8,9 @@ from nsfw.model import ConvNextModel
 
 
 @hydra.main(
-    version_base=None, config_path="../../configs", config_name="export_onnx_config"
+    version_base=None,
+    config_path="../../configs/export",
+    config_name="export_onnx_config",
 )
 def main(cfg: DictConfig):
     checkpoint_path = pathlib.Path(cfg.checkpoint)

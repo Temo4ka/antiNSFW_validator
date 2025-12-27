@@ -4,12 +4,12 @@
 # Использует baseline_model.yaml вместо model.yaml
 
 defaults:
-  - data: data.yaml
-  - model: baseline_model.yaml
-  - training: training.yaml
-  - optimizer: optimizer.yaml
-  - logging: logging.yaml
-  - trainer: trainer_baseline.yaml
+  - data: ../data/data.yaml
+  - model: ../model/baseline_model.yaml
+  - training: ../training/training.yaml
+  - optimizer: ../optimizer/optimizer.yaml
+  - logging: ../logging/logging.yaml
+  - trainer: ../trainer/trainer_baseline.yaml
   - _self_
 
 # Общие параметры

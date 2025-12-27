@@ -4,7 +4,7 @@
 # Композирует data.yaml для использования трансформаций
 
 defaults:
-  - data: data.yaml
+  - data: ../data/data.yaml
   - _self_
 
 # Параметры инференса (можно переопределить через CLI)

@@ -13,7 +13,9 @@ from nsfw.data import ImageDataSet, LoadDataFrom
 from nsfw.model import ConvNextModel
 
 
-@hydra.main(version_base=None, config_path="../../configs", config_name="infer_config")
+@hydra.main(
+    version_base=None, config_path="../../configs/infer", config_name="infer_config"
+)
 def main(cfg: DictConfig):
     pattern = cfg.data.paths.file_pattern
 

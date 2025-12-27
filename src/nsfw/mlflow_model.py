@@ -59,14 +59,16 @@ class NSFWModelWrapper(mlflow.pyfunc.PythonModel):
             config_dict = checkpoint["hyper_parameters"]
 
         if config_dict is None:
-            configs_path = pathlib.Path(__file__).parent.parent.parent / "configs"
+            configs_path = (
+                pathlib.Path(__file__).parent.parent.parent / "configs" / "train"
+            )
             if (configs_path / "config.yaml").exists():
                 with initialize(config_path=str(configs_path), version_base=None):
                     cfg = compose(config_name="config")
                     config_dict = OmegaConf.to_container(cfg, resolve=True)
-                print("Конфиг загружен из configs/config.yaml")
+                print("Конфиг загружен из configs/train/config.yaml")
             else:
-                raise FileNotFoundError("config.yaml не найден")
+                raise FileNotFoundError("configs/train/config.yaml не найден")
 
         # Загружаем модель с конфигом
         self.model = ConvNextModel.load_from_checkpoint(model_path, config=config_dict)
@@ -77,13 +79,6 @@ class NSFWModelWrapper(mlflow.pyfunc.PythonModel):
             return None
 
         image_data = np.array(model_input, dtype=np.uint8)
-
-        # Нормализуем значения в [0, 255]
-        if image_data.dtype != np.uint8:
-            if image_data.max() <= 1.0:
-                image_data = (image_data * 255).astype(np.uint8)
-            else:
-                image_data = np.clip(image_data, 0, 255).astype(np.uint8)
 
         # Преобразуем в PIL Image и применяем трансформации
         image = Image.fromarray(image_data)

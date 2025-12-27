@@ -153,7 +153,9 @@ def create_plots(metrics, output_dir="plots"):
     print(f"Сохранен график: {output_path / 'combined_metrics.png'}")
 
 
-@hydra.main(version_base=None, config_path="../../configs", config_name="plots_config")
+@hydra.main(
+    version_base=None, config_path="../../configs/plots", config_name="plots_config"
+)
 def main(cfg: DictConfig):
     mlflow.set_tracking_uri(cfg.mlflow.tracking_uri)
 

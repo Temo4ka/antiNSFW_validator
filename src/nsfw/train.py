@@ -32,7 +32,7 @@ def shuffle_and_split_data(data, labels, split_ratio=0.8, seed=42):
     return train_data, train_labels, val_data, val_labels
 
 
-@hydra.main(version_base=None, config_path="../../configs", config_name="config")
+@hydra.main(version_base=None, config_path="../../configs/train", config_name="config")
 def main(cfg: DictConfig):
     # Загрузка данных через DVC
     data_dir = pathlib.Path(cfg.data.paths.nsfw_dir).parent
