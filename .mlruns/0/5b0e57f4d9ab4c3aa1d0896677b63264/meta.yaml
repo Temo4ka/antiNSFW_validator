@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/5b0e57f4d9ab4c3aa1d0896677b63264/artifacts
+end_time: 1766815478275
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5b0e57f4d9ab4c3aa1d0896677b63264
+run_name: flawless-cow-149
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766815471960
+status: 3
+tags: []
+user_id: temo4ka

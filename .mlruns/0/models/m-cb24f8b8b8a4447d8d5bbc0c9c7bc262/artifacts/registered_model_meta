@@ -1,0 +1,2 @@
+model_name: nsfw_detection_model
+model_version: '10'

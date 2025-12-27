@@ -1,6 +1,7 @@
 import pathlib
 
 import mlflow.pyfunc
+import numpy as np
 import torch
 from omegaconf import OmegaConf
 from PIL import Image
@@ -41,6 +42,9 @@ class NSFWModelWrapper(mlflow.pyfunc.PythonModel):
         )
 
     def load_context(self, context):
+        from hydra import compose, initialize
+        from omegaconf import OmegaConf
+
         from nsfw.model import ConvNextModel
 
         model_path = context.artifacts.get("model")
@@ -48,31 +52,44 @@ class NSFWModelWrapper(mlflow.pyfunc.PythonModel):
             print("Модель не загружена")
             return None
 
+        config_dict = None
+
         checkpoint = torch.load(model_path, map_location="cpu")
         if "hyper_parameters" in checkpoint:
             config_dict = checkpoint["hyper_parameters"]
 
         if config_dict is None:
-            print("Конфиг не найден")
-            return None
+            configs_path = pathlib.Path(__file__).parent.parent.parent / "configs"
+            if (configs_path / "config.yaml").exists():
+                with initialize(config_path=str(configs_path), version_base=None):
+                    cfg = compose(config_name="config")
+                    config_dict = OmegaConf.to_container(cfg, resolve=True)
+                print("Конфиг загружен из configs/config.yaml")
+            else:
+                raise FileNotFoundError("config.yaml не найден")
 
+        # Загружаем модель с конфигом
         self.model = ConvNextModel.load_from_checkpoint(model_path, config=config_dict)
         self.model.eval()
 
     def predict(self, context, model_input):
         if self.model is None:
-            print("Модель не загружена")
             return None
 
-        image_path = pathlib.Path(model_input)
-        if not image_path.exists():
-            print(f"Изображение не найдено: {image_path}")
-            return None
+        image_data = np.array(model_input, dtype=np.uint8)
 
-        image = Image.open(image_path).convert("RGB")
+        # Нормализуем значения в [0, 255]
+        if image_data.dtype != np.uint8:
+            if image_data.max() <= 1.0:
+                image_data = (image_data * 255).astype(np.uint8)
+            else:
+                image_data = np.clip(image_data, 0, 255).astype(np.uint8)
 
+        # Преобразуем в PIL Image и применяем трансформации
+        image = Image.fromarray(image_data)
         image_tensor = self.transform(image).unsqueeze(0)
 
+        # Инференс
         with torch.no_grad():
             logits = self.model(image_tensor)
             prob = torch.sigmoid(logits).item()
