@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/877a34effba04f149a52fa3eb094475b/artifacts
+end_time: 1766813779543
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 877a34effba04f149a52fa3eb094475b
+run_name: nimble-calf-110
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766813775494
+status: 3
+tags: []
+user_id: temo4ka

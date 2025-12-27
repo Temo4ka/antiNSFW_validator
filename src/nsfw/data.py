@@ -6,9 +6,6 @@ from torch.utils.data import Dataset
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-HEIGHT = 200
-WIDTH = 200
-
 
 class ImageDataSet(Dataset):
     def __init__(self, imageList, labels, transformer=None):
@@ -17,10 +14,7 @@ class ImageDataSet(Dataset):
         self.labels = labels
 
     def __getitem__(self, index):
-        try:
-            image = Image.open(self.imageList[index]).convert("RGB")
-        except Exception:
-            image = Image.new("RGB", (WIDTH, HEIGHT), color="black")
+        image = Image.open(self.imageList[index]).convert("RGB")
 
         label = torch.tensor(self.labels[index], dtype=torch.float32)
 

@@ -1,0 +1,7 @@
+mlflow:
+  tracking_uri: file:.mlruns
+  experiment_name: nsfw_detection
+  run_id: c1dc7b3b30d04ed8b71e9a0a9ce3c2c9
+plots:
+  output_dir: plots_analysis
+  dpi: 300

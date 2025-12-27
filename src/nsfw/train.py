@@ -1,3 +1,4 @@
+import pathlib
 import random
 import subprocess
 
@@ -12,6 +13,7 @@ from torch.utils.data import DataLoader
 from nsfw.baseline_model import CNNBaselineModel
 from nsfw.conf_analyzer import create_transforms
 from nsfw.data import ImageDataSet, LoadDataFrom
+from nsfw.dvc_utils import ensure_data_downloaded
 from nsfw.model import ConvNextModel
 
 
@@ -32,6 +34,10 @@ def shuffle_and_split_data(data, labels, split_ratio=0.8, seed=42):
 
 @hydra.main(version_base=None, config_path="../../configs", config_name="config")
 def main(cfg: DictConfig):
+    # Загрузка данных через DVC
+    data_dir = pathlib.Path(cfg.data.paths.nsfw_dir).parent
+    ensure_data_downloaded(str(data_dir), use_dvc=cfg.data.get("use_dvc", True))
+
     if "seed" in cfg:
         torch.manual_seed(cfg.seed)
         random.seed(cfg.seed)

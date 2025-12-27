@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/f66f449d545d4e8ab2c3980e6267df9c/artifacts
+end_time: 1766813750390
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f66f449d545d4e8ab2c3980e6267df9c
+run_name: incongruous-fly-870
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766813745652
+status: 3
+tags: []
+user_id: temo4ka

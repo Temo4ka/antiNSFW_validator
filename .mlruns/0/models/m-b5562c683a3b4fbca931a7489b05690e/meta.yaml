@@ -1,0 +1,10 @@
+artifact_location: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/models/m-b5562c683a3b4fbca931a7489b05690e/artifacts
+creation_timestamp: 1766814381182
+experiment_id: '0'
+last_updated_timestamp: 1766814388586
+model_id: m-b5562c683a3b4fbca931a7489b05690e
+model_type: null
+name: model
+source_run_id: 369e1fb1b7a3462283a92552cf67c50c
+status: 2
+status_message: null

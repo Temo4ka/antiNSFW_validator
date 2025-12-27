@@ -1,0 +1,23 @@
+# @package _global_
+
+# Конфигурация для запуска MLflow Serving сервера
+
+defaults:
+  - mlflow_model: mlflow_model_config.yaml
+  - _self_
+
+# Путь к чекпоинту модели
+checkpoint: "checkpoints/best-epoch=07-val_auroc=1.00.ckpt"
+
+# MLflow настройки
+mlflow:
+  tracking_uri: "file:.mlruns"
+  experiment_name: "nsfw_detection"
+
+# Имя модели в Model Registry
+model_name: "nsfw_detection_model"
+
+# Настройки serving сервера
+serving:
+  host: "127.0.0.1"
+  port: 5000

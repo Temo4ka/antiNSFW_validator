@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/c11c0f5cd24445368333ecfa13643d88/artifacts
+end_time: 1766815360228
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c11c0f5cd24445368333ecfa13643d88
+run_name: puzzled-swan-697
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766815355563
+status: 3
+tags: []
+user_id: temo4ka

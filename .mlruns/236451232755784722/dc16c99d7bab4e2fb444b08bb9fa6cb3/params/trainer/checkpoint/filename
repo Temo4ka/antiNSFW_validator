@@ -1,0 +1,1 @@
+best-{epoch:02d}-{val_accuracy:.2f}

@@ -1,0 +1,23 @@
+artifact_path: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/models/m-b5562c683a3b4fbca931a7489b05690e/artifacts
+flavors:
+  python_function:
+    artifacts:
+      model:
+        path: artifacts/best-epoch=07-val_auroc=1.00.ckpt
+        uri: checkpoints/best-epoch=07-val_auroc=1.00.ckpt
+    cloudpickle_version: 3.1.2
+    code: null
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pyfunc.model
+    python_model: python_model.pkl
+    python_version: 3.13.9
+    streamable: false
+mlflow_version: 3.8.1
+model_id: m-b5562c683a3b4fbca931a7489b05690e
+model_size_bytes: 334095939
+model_uuid: m-b5562c683a3b4fbca931a7489b05690e
+prompts: null
+run_id: 369e1fb1b7a3462283a92552cf67c50c
+utc_time_created: '2025-12-27 05:46:21.185162'

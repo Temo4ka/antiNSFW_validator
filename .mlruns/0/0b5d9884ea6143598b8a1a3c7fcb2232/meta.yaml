@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/0b5d9884ea6143598b8a1a3c7fcb2232/artifacts
+end_time: 1766813803605
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0b5d9884ea6143598b8a1a3c7fcb2232
+run_name: righteous-cat-299
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766813799282
+status: 3
+tags: []
+user_id: temo4ka

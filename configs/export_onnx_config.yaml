@@ -1,0 +1,18 @@
+# @package _global_
+
+# Конфигурация для экспорта модели в ONNX
+
+# Путь к чекпоинту модели
+checkpoint: "checkpoints/best-epoch=07-val_auroc=1.00.ckpt"
+
+# Путь для сохранения ONNX модели
+output: "models/model.onnx"
+
+# Размер входного изображения [height, width]
+input_size: [200, 200]
+
+# Версия ONNX opset
+opset_version: 14
+
+# Использовать динамический batch size
+dynamic_batch: true

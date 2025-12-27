@@ -1,0 +1,18 @@
+# @package _global_
+
+# Конфигурация для регистрации модели в MLflow Model Registry
+
+# Путь к чекпоинту модели
+checkpoint: "checkpoints/best-epoch=07-val_auroc=1.00.ckpt"
+
+# MLflow настройки
+mlflow:
+  tracking_uri: "file:.mlruns"
+  experiment_name: "nsfw_detection"
+  run_id: null  # Автоматически найдет run, если null
+
+# Имя модели в Model Registry
+model_name: "nsfw_detection_model"
+
+# Версия модели (опционально)
+model_version: null

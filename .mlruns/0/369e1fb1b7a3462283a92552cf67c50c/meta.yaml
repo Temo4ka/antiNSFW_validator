@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/369e1fb1b7a3462283a92552cf67c50c/artifacts
+end_time: 1766814388682
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 369e1fb1b7a3462283a92552cf67c50c
+run_name: righteous-crab-739
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766814381174
+status: 3
+tags: []
+user_id: temo4ka

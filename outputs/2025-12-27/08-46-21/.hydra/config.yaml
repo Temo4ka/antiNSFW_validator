@@ -1,0 +1,21 @@
+image_size:
+  height: 200
+  width: 200
+normalize:
+  mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  std:
+  - 0.229
+  - 0.224
+  - 0.225
+threshold: 0.5
+checkpoint: checkpoints/best-epoch=07-val_auroc=1.00.ckpt
+mlflow:
+  tracking_uri: file:.mlruns
+  experiment_name: nsfw_detection
+model_name: nsfw_detection_model
+serving:
+  host: 127.0.0.1
+  port: 5000

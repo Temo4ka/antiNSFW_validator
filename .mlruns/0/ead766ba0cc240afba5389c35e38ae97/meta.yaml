@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/ead766ba0cc240afba5389c35e38ae97/artifacts
+end_time: 1766813765069
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ead766ba0cc240afba5389c35e38ae97
+run_name: exultant-fox-889
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766813760608
+status: 3
+tags: []
+user_id: temo4ka

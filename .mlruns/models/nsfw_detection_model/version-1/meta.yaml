@@ -1,0 +1,15 @@
+creation_timestamp: 1766813750339
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1766813750339
+model_id: m-9adedfc01774484f89820edc83210503
+name: nsfw_detection_model
+run_id: f66f449d545d4e8ab2c3980e6267df9c
+run_link: null
+source: models:/m-9adedfc01774484f89820edc83210503
+status: READY
+status_message: null
+storage_location: file:///Users/temo4ka/StudyProjects/antiNSFW_validator/nsfw/.mlruns/0/models/m-9adedfc01774484f89820edc83210503/artifacts
+user_id: null
+version: 1
